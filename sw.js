@@ -3,8 +3,8 @@ const DYNAMIC_CACHE = 'dynamic-v1';
 const INMUTABLE_CACHE = 'inmutable-v1';
 
 const APP_SHELL = [
-    '/',
-    'index.html'
+    //'/',
+    //'index.html'
 ]
 
 const APP_SHELL_INMUTABLE = [
