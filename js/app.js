@@ -68,7 +68,6 @@ avatarBtns.on('click', function() {
 // Boton de salir
 salirBtn.on('click', function() {
     logIn(false);
-
 });
 
 // Boton de nuevo mensaje
