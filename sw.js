@@ -1,25 +1,27 @@
-const STATIC_CACHE = 'static-v2';
-const DYNAMIC_CACHE = 'dynamic-v2';
-const INMUTABLE_CACHE = 'inmutable-v2';
+const STATIC_CACHE = 'cache-v2';
 
 const APP_SHELL = [
-    //'/',
-    //'index.html'
-]
-
-const APP_SHELL_INMUTABLE = [
+    './img/favicon.ico',
+    './img/icons/icon-144x144.png',
+    './img/avatars/ironman.jpg',
+    './img/avatars/wolverine.jpg',
+    './img/avatars/spiderman.jpg',
+    './img/avatars/hulk.jpg',
+    './img/avatars/thor.jpg',
+    './css/animate.css',
+    './css/style.css',
+    './js/libs/jquery.js',
+    './js/app.js',
     'https://fonts.googleapis.com/css?family=Quicksand:300,400',
-    'https://fonts.googleapis.com/css?family=Lato:400,300'
+    'https://fonts.googleapis.com/css?family=Lato:400,300',
+    'https://use.fontawesome.com/releases/v5.3.1/css/all.css'
 ]
 
 self.addEventListener('install', e => {
     const cacheStatic = caches.open(STATIC_CACHE).then(cache => {
         cache.addAll(APP_SHELL);
     })
-    const cacheInmutable = caches.open(INMUTABLE_CACHE).then(cache => {
-        cache.addAll(APP_SHELL_INMUTABLE);
-    })
-    e.waitUntil( Promise.all([cacheStatic, cacheInmutable]) );
+    e.waitUntil( Promise.all([cacheStatic]) );
 })
 
 self.addEventListener('activate', e => {
@@ -33,6 +35,11 @@ self.addEventListener('activate', e => {
     e.waitUntil(response);
 })
 
-self.addEventListener('fetch', e => {
-    
+self.addEventListener('fetch', event => {
+    const response = caches.match(event.request)
+    .then( res => {
+        if(res) return res;
+        return fetch(event.request);
+    })
+    event.respondWith(response);
 })
