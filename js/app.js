@@ -7,7 +7,7 @@ var titulo = $('#titulo');
 var nuevoBtn = $('#nuevo-btn');
 var salirBtn = $('#salir-btn');
 var cancelarBtn = $('#cancel-btn');
-var postBtn = $('#post-btn');
+var postBtn = $('.post-btn');
 var avatarSel = $('#seleccion');
 var timeline = $('#timeline');
 
