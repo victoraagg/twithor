@@ -2,7 +2,9 @@ if(navigator.serviceWorker){
     navigator.serviceWorker.register('./sw.js');
 }
 
-// Referencias de jQuery
+var db = new PouchDB('heroes');
+var remoteCouch = false;
+
 var titulo = $('#titulo');
 var nuevoBtn = $('#nuevo-btn');
 var salirBtn = $('#salir-btn');
@@ -10,18 +12,23 @@ var cancelarBtn = $('#cancel-btn');
 var postBtn = $('.post-btn');
 var avatarSel = $('#seleccion');
 var timeline = $('#timeline');
-
 var modal = $('#modal');
 var modalAvatar = $('#modal-avatar');
-var avatarBtns  = $('.seleccion-avatar');
-var txtMensaje  = $('#txtMensaje');
+var avatarBtns = $('.seleccion-avatar');
+var txtMensaje = $('#txtMensaje');
 
-// El usuario, contiene el ID del héroe seleccionado
 var usuario;
 
-// Codigo de la aplicación
+function printMessagesUI(mensaje) {
+    mensaje.map(element => {
+        if (element.doc.heroe == usuario) {
+            crearMensajeHTML(element.doc.title, element.doc.heroe)
+        }
+    })
+}
+
 function crearMensajeHTML(mensaje, personaje) {
-    var content =`
+    var content = `
     <li class="animated fadeIn fast">
         <div class="avatar">
             <img src="img/avatars/${ personaje }.jpg">
@@ -32,7 +39,6 @@ function crearMensajeHTML(mensaje, personaje) {
                 <br/>
                 ${ mensaje }
             </div>
-            
             <div class="arrow"></div>
         </div>
     </li>
@@ -41,48 +47,50 @@ function crearMensajeHTML(mensaje, personaje) {
     cancelarBtn.click();
 }
 
-// Globals
-function logIn( ingreso ) {
-    if ( ingreso ) {
-        nuevoBtn.removeClass('oculto');
-        salirBtn.removeClass('oculto');
-        timeline.removeClass('oculto');
-        avatarSel.addClass('oculto');
-        modalAvatar.attr('src', 'img/avatars/' + usuario + '.jpg');
-    } else {
-        nuevoBtn.addClass('oculto');
-        salirBtn.addClass('oculto');
-        timeline.addClass('oculto');
-        avatarSel.removeClass('oculto');
-        titulo.text('Seleccione Personaje');
-    }
+function borrarMensajes() {
+    timeline.empty();
 }
 
-// Seleccion de personaje
+function logIn() {
+    nuevoBtn.removeClass('oculto');
+    salirBtn.removeClass('oculto');
+    timeline.removeClass('oculto');
+    avatarSel.addClass('oculto');
+    db.allDocs({include_docs: true, descending: true}, function(err, doc) {
+        printMessagesUI(doc.rows);
+    });
+}
+
+function logOut() {
+    nuevoBtn.addClass('oculto');
+    salirBtn.addClass('oculto');
+    timeline.addClass('oculto');
+    avatarSel.removeClass('oculto');
+    modal.addClass('oculto');
+    borrarMensajes();
+    titulo.text('Seleccione Personaje');
+}
+
 avatarBtns.on('click', function() {
     usuario = $(this).data('user');
     titulo.text('@' + usuario);
-    logIn(true);
+    logIn();
 });
 
-// Boton de salir
 salirBtn.on('click', function() {
-    logIn(false);
+    logOut();
 });
 
-// Boton de nuevo mensaje
 nuevoBtn.on('click', function() {
     modal.removeClass('oculto');
     modal.animate({ 
-        marginTop: '-=1000px',
+        zIndex: 1,
         opacity: 1
     }, 200 );
 });
 
-// Boton de cancelar mensaje
 cancelarBtn.on('click', function() {
    modal.animate({ 
-       marginTop: '+=1000px',
        opacity: 0
     }, 200, function() {
         modal.addClass('oculto');
@@ -90,7 +98,6 @@ cancelarBtn.on('click', function() {
     });
 });
 
-// Boton de enviar mensaje
 postBtn.on('click', function() {
     var mensaje = txtMensaje.val();
     if ( mensaje.length === 0 ) {
@@ -98,4 +105,13 @@ postBtn.on('click', function() {
         return;
     }
     crearMensajeHTML( mensaje, usuario );
+    var todo = {
+        _id: new Date().toISOString(),
+        heroe: usuario,
+        title: mensaje
+    };
+    db.put(todo, function callback(err, result) {
+        if (!err) {
+        }
+    });
 });
