@@ -9,6 +9,7 @@ var titulo = $('#titulo');
 var nuevoBtn = $('#nuevo-btn');
 var salirBtn = $('#salir-btn');
 var cancelarBtn = $('#cancel-btn');
+var deleteBtn = $('#delete');
 var postBtn = $('.post-btn');
 var avatarSel = $('#seleccion');
 var timeline = $('#timeline');
@@ -22,12 +23,12 @@ var usuario;
 function printMessagesUI(mensaje) {
     mensaje.map(element => {
         if (element.doc.heroe == usuario) {
-            crearMensajeHTML(element.doc.title, element.doc.heroe)
+            crearMensajeHTML(element.doc.title, element.doc.heroe, element.doc._id)
         }
     })
 }
 
-function crearMensajeHTML(mensaje, personaje) {
+function crearMensajeHTML(mensaje, personaje, id) {
     var content = `
     <li class="animated fadeIn fast">
         <div class="avatar">
@@ -40,6 +41,7 @@ function crearMensajeHTML(mensaje, personaje) {
                 ${ mensaje }
             </div>
             <div class="arrow"></div>
+            <i data-id="${ id }" id="delete" class="fa fa-2x fa-times-circle"></i>
         </div>
     </li>
     `;
@@ -77,6 +79,17 @@ avatarBtns.on('click', function() {
     logIn();
 });
 
+timeline.on('click', deleteBtn, function(event) {
+    var id = event.target.attributes[0].value;
+    db.get(id).then(function(doc) {
+        return db.remove(doc);
+    }).then(function (result) {
+        logOut();
+    }).catch(function (err) {
+        console.log(err);
+    });
+});
+
 salirBtn.on('click', function() {
     logOut();
 });
@@ -104,12 +117,12 @@ postBtn.on('click', function() {
         cancelarBtn.click();
         return;
     }
-    crearMensajeHTML( mensaje, usuario );
     var todo = {
         _id: new Date().toISOString(),
         heroe: usuario,
         title: mensaje
     };
+    crearMensajeHTML( mensaje, usuario, todo._id );
     db.put(todo, function callback(err, result) {
         if (!err) {
         }

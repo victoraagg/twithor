@@ -8,6 +8,7 @@
     <meta name="description" content="TwiThor para héroes">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">  
     <link rel="shortcut icon" type="image/ico" href="img/favicon.ico"/>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#3498db">
@@ -17,13 +18,11 @@
     <link rel="apple-touch-icon" href="./img/icons-ios/apple-launch-750x1334.png">
 </head>
 <body>
-
     <span class="header"> 
         <span id="salir-btn" class="fa fa-sign-out-alt out oculto animated fadeIn"></span>
-        <span id="titulo">Seleccione Personaje</span>
+        <span id="titulo"  class="delete">Seleccione Personaje</span>
         <span id="nuevo-btn" class="fa fa-pen-square new oculto animated fadeIn fast"></span>
     </span>
-
     <div id="modal">
         <span class="first"> 
             <span id="titulo-modal">Nuevo mensaje</span>
@@ -42,19 +41,14 @@
             <i class="fa fa-image"></i>
         </div>
     </div>
-
     <div id="seleccion" class="seleccion animated fadeIn fast">
         <img data-user="wolverine" src="img/avatars/wolverine.jpg" alt="wolverine" class="seleccion-avatar">
         <img data-user="thor" src="img/avatars/thor.jpg" alt="thor" class="seleccion-avatar">
         <img data-user="hulk" src="img/avatars/hulk.jpg" alt="hulk" class="seleccion-avatar">
     </div>
-
     <ul id="timeline" class="timeline oculto"></ul>
     <script src="//cdn.jsdelivr.net/npm/pouchdb@7.2.1/dist/pouchdb.min.js"></script>
     <script src="js/libs/jquery.js"></script>
     <script src="js/app.js"></script>  
-    <link href='https://fonts.googleapis.com/css?family=Quicksand:300,400' rel='stylesheet' type='text/css'>
-	<link href='https://fonts.googleapis.com/css?family=Lato:400,300' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">  
 </body>
 </html>

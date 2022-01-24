@@ -2,15 +2,12 @@
   box-sizing: border-box;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
-  font-family: 'Quicksand';
+  font-family: monospace;
 }
   
 html, body {
   margin: 0px !important;
-  color: #7f8c8d;
-  font-size: 16px;
   background-color: #dde1e2; 
-  width: 100%;
 }
 
 body {
@@ -141,6 +138,12 @@ textarea {
   bottom: 50px;
 }
 
+.fa-times-circle {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
 .bubble {
   width: 100%;
   padding: .5em 1em;
@@ -239,7 +242,6 @@ textarea {
   padding: 1em 0 !important;
   color: white;
   text-align: center;
-  font-family: "Lato";
   font-size: 1.6em;
 }
 
